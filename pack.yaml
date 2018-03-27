@@ -1,0 +1,9 @@
+---
+ref: netalytics_o365 
+name: netalytics_o365
+description: Netalytics O365 Integration
+keywords:
+  - netalytics
+version: 0.0.1
+author: Ramanadh Ravinuthala
+email: rravinuthala@gmail.com

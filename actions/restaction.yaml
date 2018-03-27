@@ -1,0 +1,21 @@
+---
+name: rest_action
+runner_type: python-script
+description: Generic Rest Action for Cisco Meraki
+enabled: true
+entry_point: restaction.py
+parameters:
+  method:
+    type: string
+    default: 'GET'
+    required: true
+  endpointurl:
+    type: string
+    default: '/users'
+    required: true
+  queryString:
+    type: string
+    default: ''
+  data:
+    type: string
+    default: ''
