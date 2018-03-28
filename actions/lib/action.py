@@ -12,7 +12,6 @@ class Netalyticso365Action(Action):
         super(Netalyticso365Action, self).__init__(config)
         self.params = None
         self.accesstoken = self.config.get('access_token', '')
-        self.base_url = self.config.get('base_url', 'https://graph.microsoft.com/v1.0/')
 
     def handleRequestAuth(self, headers):
         headers["Accept"] = "application/json"
@@ -27,9 +26,9 @@ class Netalyticso365Action(Action):
                 url += "?" + query
         return url
 
-    def doRequest(self, method, endpointURL, queryString=None, data=None):
+    def doRequest(self, base_url, method, endpointURL, queryString=None, data=None):
         self.method = method
-        self.endpointURL = self.base_url + endpointURL
+        self.endpointURL = base_url + endpointURL
         self.queryString = queryString
         self.data = data.encode('ascii', 'ignore') if isinstance(data, unicode) else data
 

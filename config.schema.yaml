@@ -10,3 +10,9 @@
     secret: false
     required: false
     default: "https://graph.microsoft.com/v1.0/"
+  powershell_url:
+    description: "The base URL used for O365 powershell commands execution"
+    type: "string"
+    secret: false
+    required: false
+    default: "https://cconsole.azurewebsites.net/api/HttpTriggerPowerShell1?code=zuzIeVijuKY1nt05/wgdT1Sr3LDS9XTfYTRrbB2yf/bErY8xrT18KA=="

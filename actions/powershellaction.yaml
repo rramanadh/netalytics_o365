@@ -1,18 +1,17 @@
 ---
-name: rest_action
+name: powershell_action
 runner_type: python-script
-description: Generic Rest Action for Office 365
+description: Generic Power shell Action for Cisco Meraki
 enabled: true
-entry_point: restaction.py
+entry_point: powershellaction.py
 parameters:
   method:
     type: string
-    default: 'GET'
+    default: 'POST'
     required: true
   endpointurl:
     type: string
-    default: '/users'
-    required: true
+    default: ''
   queryString:
     type: string
     default: ''
