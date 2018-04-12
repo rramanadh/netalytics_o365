@@ -19,3 +19,6 @@ parameters:
   data:
     type: string
     default: ''
+  baseurl:
+    type: string
+    default: 'https://graph.microsoft.com/v1.0/'
