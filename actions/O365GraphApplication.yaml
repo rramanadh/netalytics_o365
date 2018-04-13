@@ -1,0 +1,22 @@
+---
+name: o365_graphapplication
+runner_type: python-script
+description: Creates Graph application using the username and password provided
+enabled: true
+entry_point: O365GraphApplication.py
+parameters:
+  partnerId:
+    type: string
+    required: true
+  companyId:
+    type: string
+    required: true
+  username:
+    type: string
+    default: ""
+  password:
+    type: string
+    default: ""
+  action:
+    type: string
+    default: "create"

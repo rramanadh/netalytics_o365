@@ -18,3 +18,9 @@ parameters:
   data:
     type: string
     default: ''
+  companyId:
+    type: string
+    default: ''
+  updateCreds:
+    type: boolean
+    default: true

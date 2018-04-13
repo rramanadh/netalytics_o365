@@ -1,0 +1,13 @@
+---
+name: o365sync_action
+runner_type: python-script
+description: Sync's O365 Data based on companyId and partnerId
+enabled: true
+entry_point: O365syncaction.py
+parameters:
+  partnerId:
+    type: string
+    required: true
+  companyId:
+    type: string
+    required: true

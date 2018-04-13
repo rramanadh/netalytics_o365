@@ -22,3 +22,6 @@ parameters:
   baseurl:
     type: string
     default: 'https://graph.microsoft.com/v1.0/'
+  companyId:
+    type: string
+    required: true

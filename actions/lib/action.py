@@ -3,6 +3,7 @@ import urllib
 import xmldict
 import requests
 import traceback
+import azure.common.credentials
 import xml.etree.ElementTree as ET
 from st2common.runners.base_action import Action
 
@@ -11,12 +12,13 @@ class Netalyticso365Action(Action):
     def __init__(self, config):
         super(Netalyticso365Action, self).__init__(config)
         self.params = None
-        self.accesstoken = self.config.get('access_token', '')
+        self.accesstoken = ''
 
     def handleRequestAuth(self, headers):
         headers["Accept"] = "application/json"
         headers["Content-Type"] = "application/json"
-        headers["Authorization"] = 'Bearer {0}'.format(self.accesstoken)
+        if self.accesstoken:
+            headers["Authorization"] = 'Bearer {0}'.format(self.accesstoken)
 
     def buildQuery(self, url, query=None):
         if query is not None and query:
@@ -26,8 +28,28 @@ class Netalyticso365Action(Action):
                 url += "?" + query
         return url
 
-    def doRequest(self, base_url, method, endpointURL, queryString=None, data=None):
+    def refreshToken(self, companyId):
+        companyIdKey = companyId + '_office365'
+        value = self.action_service.get_value(companyIdKey, local=False)
+        accessToken = ""
+        if value:
+            credsData = json.loads(value)
+            credentials = azure.common.credentials.ServicePrincipalCredentials(
+                client_id=str(credsData.get("graphClientId", "")),
+                secret=str(credsData.get("graphClientSecret", "")),
+                tenant=str(credsData.get("DefaultDomainName", "")),
+                resource='https://graph.windows.net'
+            )
+            token_response = credentials.__dict__
+            if "token" in token_response and "access_token" in token_response["token"]:
+                credsData['accessToken'] = token_response['token'].get('access_token')
+                accessToken = credsData['accessToken']
+            self.action_service.set_value(name=companyIdKey, value=json.dumps(credsData), local=False)
+        return accessToken
+
+    def doRequest(self, base_url, method, endpointURL, queryString=None, data=None, access_token='', companyId=''):
         self.method = method
+        self.accesstoken = access_token
         self.endpointURL = base_url + endpointURL
         self.queryString = queryString
         self.data = data.encode('ascii', 'ignore') if isinstance(data, unicode) else data
@@ -79,6 +101,11 @@ class Netalyticso365Action(Action):
                     x["ErrorString"] = traceback.format_exc()
                     print x["ErrorString"]
                     return False, x
+            elif int(resp.status_code) == 401:
+                access_token = self.refreshToken(companyId)
+                if len(access_token) == 0:
+                    return False, "Error in Access Token"
+                return self.doRequest(base_url, method, endpointURL, queryString, data, access_token)
             try:
                 # Checking if response is in XML
                 try:
@@ -103,7 +130,7 @@ class Netalyticso365Action(Action):
                 pass
             return False, {'status': resp.status_code, 'msg': str(text) if not isinstance(text, str) else text}
         except Exception as e:
-            x = {}
+            x = dict()
             x["ErrorCode"] = 503
             x["ErrorString"] = str(e)
             x['trace'] = traceback.format_exc()
