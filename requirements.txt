@@ -1,2 +1,4 @@
 xmldict
 requests
+azure.common
+msrest
