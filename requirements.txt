@@ -3,3 +3,4 @@ requests
 azure.common
 msrest
 msrestazure
+stomp.py

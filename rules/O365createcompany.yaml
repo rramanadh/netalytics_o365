@@ -1,0 +1,22 @@
+---
+    name: "o365_createcompanyrule"                # required
+    pack: "netalytics_o365"                       # optional
+    description: "Processes Active MQ messages."  # optional
+    enabled: true                                 # required
+
+    trigger:                                      # required
+      type: "netalytics_o365.mqevent"
+      parameters: {}
+
+    criteria:
+      trigger.methname:
+        type: "iequals"
+        pattern: "createO365"
+
+    action:                                       # required
+        ref: "netalytics_o365.createO365syncworkflow"
+        parameters:                               # optional
+            partnerId: "{{trigger.params.partnerId}}"
+            companyId: "{{trigger.params.companyId}}"
+            username: "{{trigger.params.username}}"
+            password: "{{trigger.params.password}}"

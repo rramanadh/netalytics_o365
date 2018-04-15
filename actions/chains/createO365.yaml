@@ -1,0 +1,30 @@
+---
+    chain:
+        -
+            name: "c1"
+            ref: "netalytics_o365.o365_graphapplication"
+            parameters:
+              partnerId: "{{partnerId}}"
+              companyId: "{{companyId}}"
+              username: "{{username}}"
+              password: "{{password}}"
+            on-success: "c2"
+            on-failure: "fail"
+        -
+            name: "c2"
+            ref: "netalytics_o365.o365sync_action"
+            parameters:
+              partnerId: "{{partnerId}}"
+              companyId: "{{companyId}}"
+            on-success: ""
+            on-failure: "fail"
+        -
+            name: "success"
+            ref: "core.local"
+            parameters:
+                cmd : "echo O365 credentials saved and data synced"
+        -
+            name: "fail"
+            ref: "core.local"
+            parameters:
+                cmd : "Failed to create O365 and sync data"

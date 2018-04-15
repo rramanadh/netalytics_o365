@@ -47,12 +47,29 @@ class Netalyticso365Action(Action):
             self.action_service.set_value(name=companyIdKey, value=json.dumps(credsData), local=False)
         return accessToken
 
+    def getToken(self, companyId):
+        companyIdKey = companyId + '_office365'
+        value = self.action_service.get_value(companyIdKey, local=False)
+        accessToken = ""
+        if value:
+            try:
+                retrieved_data = json.loads(value)
+                accessToken = retrieved_data.get('accessToken', '')
+            except Exception, e:
+                print "Exception in getting accesstoken:%s" % e
+        return accessToken
+
     def doRequest(self, base_url, method, endpointURL, queryString=None, data=None, access_token='', companyId=''):
         self.method = method
+        self.companyId = companyId
         self.accesstoken = access_token
         self.endpointURL = base_url + endpointURL
         self.queryString = queryString
         self.data = data.encode('ascii', 'ignore') if isinstance(data, unicode) else data
+        if companyId and len(self.accesstoken) == 0:
+            self.accesstoken = self.getToken(self.companyId)
+            if len(self.accesstoken):
+                self.accesstoken = self.refreshToken(companyId)
 
         try:
             headers = {'Content-Length': '0'}

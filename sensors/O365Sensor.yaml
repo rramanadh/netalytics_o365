@@ -1,0 +1,10 @@
+---
+class_name: "O365Sensor"
+entry_point: "O365Sensor.py"
+description: "O365 sensor which listens for messages and emits triggers"
+trigger_types:
+  -
+    name: "mqevent"
+    description: "Active MQ message that should be processed."
+    payload_schema:
+      type: "object"

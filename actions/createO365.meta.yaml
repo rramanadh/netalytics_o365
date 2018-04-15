@@ -1,0 +1,26 @@
+---
+# Action definition metadata
+name: "createO365syncworkflow"
+description: "Initiates O365 and data sync"
+# `runner_type` has value `action-chain` to identify that action is an ActionChain.
+runner_type: "action-chain"
+# `entry_point` path to the ActionChain definition file, relative to the pack's action directory.
+entry_point: "chains/createO365.yaml"
+enabled: true
+parameters:
+  partnerId:
+    type: string
+    required: true
+    description: "Partner ID"
+  companyId:
+    type: string
+    required: true
+    description: "Company ID"
+  username:
+    type: string
+    required: true
+    description: "Username of O365 account"
+  password:
+    type: string
+    required: true
+    description: "Password of O365 account"
